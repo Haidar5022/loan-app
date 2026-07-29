@@ -1,0 +1,43 @@
+<p class="eyebrow">Enter your Account number to get started.</p>
+
+<div class="field">
+  <label>Account No *</label>
+  <input type="text" [value]="accountNo" disabled />
+</div>
+
+<form [formGroup]="form" (ngSubmit)="onSubmit()">
+
+  <div class="field" [class.invalid]="otp.invalid && otp.touched">
+    <label>Enter OTP</label>
+    <input
+      type="password"
+      formControlName="otp"
+      inputmode="numeric"
+      maxlength="4"
+      autocomplete="off"
+    />
+    <div class="error-msg">Please enter the 4-digit OTP.</div>
+    <div class="otp-meta">
+      Didn't receive the OTP?
+      <span class="timer" *ngIf="!resendEnabled">
+        (0:{{ secondsLeft < 10 ? '0' + secondsLeft : secondsLeft }}sec)
+      </span>
+      <a class="resend-link" [class.disabled]="!resendEnabled" (click)="onResend()">Resend OTP</a>
+    </div>
+  </div>
+
+  <div class="toast" [class.show]="showToast">
+    ✅ Verified! In a real app, this would take you to the next onboarding step.
+  </div>
+
+  <button type="submit" class="btn btn-primary">Submit</button>
+  <button type="button" class="btn btn-secondary show btn-row-spacer" (click)="onBack()">Back</button>
+</form>
+
+<div class="promo">
+  <div class="promo-image crypto"></div>
+  <div class="promo-copy">
+    <div class="title">Get Personal Loans at Just 8.99%!</div>
+    <div class="sub">Flexible tenure options and easy EMIs.</div>
+  </div>
+</div>

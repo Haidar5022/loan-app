@@ -1,0 +1,26 @@
+<p class="eyebrow">Enter your Account number to get started.</p>
+
+<form [formGroup]="form" (ngSubmit)="onContinue()">
+
+  <div class="field" [class.invalid]="accountNo.invalid && accountNo.touched">
+    <label>Account No *</label>
+    <input
+      type="text"
+      formControlName="accountNo"
+      inputmode="numeric"
+      maxlength="16"
+      autocomplete="off"
+    />
+    <div class="error-msg">Please enter a valid account number (9–16 digits).</div>
+  </div>
+
+  <button type="submit" class="btn btn-primary">Continue</button>
+</form>
+
+<div class="promo">
+  <div class="promo-image loans"></div>
+  <div class="promo-copy">
+    <div class="title">Get Personal Loans at Just 8.99%!</div>
+    <div class="sub">Flexible tenure options and easy EMIs.</div>
+  </div>
+</div>
