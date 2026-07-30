@@ -40,17 +40,22 @@ export class Otp implements OnInit, OnDestroy {
     this.startCountdown();
   }
 
-  onSubmit(): void {
-    if (this.otp.invalid) {
-      this.otp.markAsTouched();
-      return;
-    }
-    this.showToast = true;
+onSubmit(): void {
+  if (this.otp.invalid) {
+    this.otp.markAsTouched();
+    return;
   }
+  this.showToast = true;
 
-  onBack(): void {
-    this.router.navigate(['/login']);
-  }
+  // 1 second baad user ko automatic Loan Calculator page par bhej do
+  setTimeout(() => {
+    this.router.navigate(['/loan-calculator']);
+  }, 1000);
+}
+
+onBack(): void {
+  this.router.navigate(['/login']);
+}
 
   onResend(): void {
     if (!this.resendEnabled) return;

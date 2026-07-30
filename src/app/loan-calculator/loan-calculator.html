@@ -1,0 +1,96 @@
+<div class="calculator-wrapper">
+  <!-- Header Tag -->
+  <div class="tag">Loan EMI Calculator</div>
+
+  <h2>Estimated amount displayed. Final loan terms will be customised upon approval.</h2>
+
+  <!-- Main Calculator Card -->
+  <div class="calc-card">
+    <!-- Left Inputs Section -->
+    <div class="calc-left">
+      <h3>Business Loan <span>EMI Calculator</span></h3>
+
+      <!-- Amount Section -->
+      <div class="input-group">
+        <div class="label-row">
+          <label>Amount</label>
+          <div class="amount-box">
+            ₹ {{ amount | number }}
+          </div>
+        </div>
+        <input 
+          type="range" 
+          min="50000" 
+          max="50000000" 
+          step="10000" 
+          [(ngModel)]="amount" 
+          class="slider"
+        />
+        <div class="range-labels">
+          <span>50K</span>
+          <span>5 Cr</span>
+        </div>
+      </div>
+
+      <!-- Tenure Section -->
+      <div class="input-group">
+        <div class="label-row">
+          <label>Tenure</label>
+          <div class="toggle-switch">
+            <button [class.active]="tenureType === 'Year'" (click)="setTenureType('Year')">1 Year</button>
+            <button [class.active]="tenureType === 'Month'" (click)="setTenureType('Month')">Month</button>
+            <button [class.active]="tenureType === 'Days'" (click)="setTenureType('Days')">Days</button>
+          </div>
+        </div>
+        <input 
+          type="range" 
+          [min]="1" 
+          [max]="tenureType === 'Year' ? 10 : (tenureType === 'Month' ? 120 : 365)" 
+          [(ngModel)]="tenure" 
+          class="slider"
+        />
+        <div class="range-labels">
+          <span>1</span>
+          <span>{{ tenureType === 'Year' ? 10 : (tenureType === 'Month' ? 120 : 365) }}</span>
+        </div>
+      </div>
+
+      <p class="note">
+        <strong>Note:</strong> The estimated amount shown is based on your input. The applicable interest rate is fixed and determined by the selected tenure.
+      </p>
+    </div>
+
+    <!-- Right Summary Box -->
+    <div class="calc-right">
+      <div class="emi-header">
+        <p>Your Monthly EMI Payment</p>
+        <h1>₹ {{ monthlyEmi | number }}</h1>
+      </div>
+
+      <div class="summary-details">
+        <div class="detail-row">
+          <span>Principal Amount</span>
+          <strong>₹ {{ amount | number }}</strong>
+        </div>
+        <div class="detail-row">
+          <span>Interest Amount</span>
+          <strong>₹ {{ totalInterest | number }}</strong>
+        </div>
+        <hr />
+        <div class="detail-row total">
+          <span>Total Amount</span>
+          <strong>₹ {{ totalAmount | number }}</strong>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Buttons -->
+  <div class="action-bar">
+    <button class="btn-link">EMI Calculator</button>
+    <div class="btn-group">
+      <button class="btn-outline" (click)="onBack()">Back</button>
+      <button class="btn-primary" (click)="onApply()">Apply Now</button>
+    </div>
+  </div>
+</div>
