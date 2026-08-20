@@ -50,10 +50,11 @@ export class LoanCalculator {
   }
 
   onBack(): void {
-    this.router.navigate(['/otp']);
+    this.router.navigate(['./otp']);
   }
 
   onApply(): void {
-    alert('Loan Application Submitted Successfully!');
+    // alert('Loan Application Submitted Successfully!');
+  this.router.navigate(['./loan-application']);
   }
 }

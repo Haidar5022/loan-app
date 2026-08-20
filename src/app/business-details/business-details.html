@@ -1,0 +1,306 @@
+<div class="wrap">
+
+  <!-- Top bar -->
+  <header class="topbar">
+    <div class="brand">Rumango <strong>ICUST Bank</strong></div>
+  </header>
+
+  <!-- Header Card & Stepper Track -->
+  <div class="main-card">
+    <div class="heading-row">
+      <div>
+        <h1 class="page-title">Business Loan</h1>
+        <p class="page-subtitle">"Get your Loan account in just 11 steps"</p>
+      </div>
+      <div class="ref-badge">Ref Number: <strong>{{ refNumber }}</strong></div>
+    </div>
+
+    <div class="progress-track">
+      <div class="progress-fill" [style.width.%]="progressPercent"></div>
+    </div>
+
+    <!-- Stepper Track -->
+    <div class="stepper-row">
+      <button class="scroll-arrow" (click)="scrollStepper(-1)" aria-label="Scroll left">‹</button>
+
+      <div class="stepper-track" #stepperTrack>
+        <ng-container *ngFor="let step of steps; let i = index; let last = last">
+          <div
+            class="step-node"
+            [class.completed]="step.status === 'completed'"
+            [class.active]="step.status === 'active'"
+            [class.clickable]="(step.status === 'completed' || step.status === 'active') && step.stage !== 1"
+            [class.unclickable-step]="step.stage === 1"
+            (click)="step.stage !== 1 ? navigateToStep(step) : null"
+          >
+            <span class="step-icon">{{ getStepIcon(step.status) }}</span>
+            <div class="step-text">
+              <div class="step-name">{{ step.name }}</div>
+              <div class="step-stage">Stage {{ step.stage }}</div>
+            </div>
+          </div>
+          <div class="step-connector" *ngIf="!last" [class.filled]="step.status === 'completed'"></div>
+        </ng-container>
+      </div>
+
+      <button class="scroll-arrow" (click)="scrollStepper(1)" aria-label="Scroll right">›</button>
+    </div>
+  </div>
+
+  <!-- Accordion Section -->
+  <div class="accordion">
+
+    <!-- ==================== STAGE 2: LOAN DETAILS DROPDOWN ==================== -->
+    <div class="accordion-section" [class.is-expanded]="expandedSection === 'Loan Details'">
+      <div class="accordion-header clickable-header" (click)="toggleSection('Loan Details')">
+        <span class="header-icon completed">✓</span>
+        <span class="header-name">Loan Details</span>
+        <span class="accordion-arrow">{{ expandedSection === 'Loan Details' ? '▲' : '▼' }}</span>
+      </div>
+
+      <div class="accordion-body-embedded" *ngIf="expandedSection === 'Loan Details'">
+        <app-loan-application></app-loan-application>
+      </div>
+    </div>
+
+    <!-- ==================== STAGE 3: DOCUMENT UPLOAD DROPDOWN ==================== -->
+    <div class="accordion-section" [class.is-expanded]="expandedSection === 'Document Upload'">
+      <div class="accordion-header clickable-header" (click)="toggleSection('Document Upload')">
+        <span class="header-icon completed">✓</span>
+        <span class="header-name">Document Upload</span>
+        <span class="accordion-arrow">{{ expandedSection === 'Document Upload' ? '▲' : '▼' }}</span>
+      </div>
+
+      <div class="accordion-body-embedded" *ngIf="expandedSection === 'Document Upload'">
+        <app-document-upload></app-document-upload>
+      </div>
+    </div>
+
+    <!-- ==================== STAGE 4: BUSINESS DETAILS (ACTIVE) ==================== -->
+    <div class="accordion-section is-expanded current-active-section">
+      <div class="accordion-header static">
+        <span class="header-icon active">◐</span>
+        <span class="header-name">Business Details</span>
+      </div>
+
+      <div class="accordion-body" [formGroup]="businessForm">
+
+        <h3 class="section-title">Basic Company Information</h3>
+        <div class="notched-grid">
+          <div class="notched-field span-2">
+            <label>Registered/Company Name <span class="req">*</span></label>
+            <input type="text" formControlName="companyName" />
+          </div>
+
+          <div class="notched-field has-icon">
+            <label>Company Type <span class="req">*</span></label>
+            <select formControlName="companyType">
+              <option value="" disabled selected></option>
+              <option>Sole Proprietorship</option>
+              <option>Partnership</option>
+              <option>Private Limited</option>
+              <option>LLP</option>
+              <option>Cooperative</option>
+            </select>
+            <span class="field-icon">▾</span>
+          </div>
+
+          <div class="notched-field has-icon">
+            <label>Nature of the Business <span class="req">*</span></label>
+            <select formControlName="natureOfBusiness">
+              <option value="" disabled selected></option>
+              <option>Manufacturing</option>
+              <option>Trading</option>
+              <option>Services</option>
+              <option>Agriculture</option>
+              <option>Other</option>
+            </select>
+            <span class="field-icon">▾</span>
+          </div>
+
+          <div class="notched-field has-icon">
+            <label>Segment <span class="req">*</span></label>
+            <select formControlName="segment">
+              <option value="" disabled selected></option>
+              <option>Micro</option>
+              <option>Small</option>
+              <option>Medium</option>
+              <option>Corporate</option>
+            </select>
+            <span class="field-icon">▾</span>
+          </div>
+
+          <div class="notched-field has-icon">
+            <label>Industry/Sector <span class="req">*</span></label>
+            <select formControlName="industrySector">
+              <option>Retail</option>
+              <option>Food &amp; Beverage</option>
+              <option>Construction</option>
+              <option>Technology</option>
+              <option>Healthcare</option>
+              <option>Education</option>
+              <option>Transport &amp; Logistics</option>
+              <option>Other</option>
+            </select>
+            <span class="field-icon">▾</span>
+          </div>
+
+          <div class="notched-field">
+            <label>Number of Directors <span class="req">*</span></label>
+            <input type="number" formControlName="numberOfDirectors" />
+          </div>
+
+          <div class="notched-field has-icon">
+            <label>Country of Incorporation <span class="req">*</span></label>
+            <select formControlName="countryOfIncorporation">
+              <option value="" disabled selected></option>
+              <option>Ghana</option>
+              <option>Nigeria</option>
+              <option>India</option>
+              <option>Other</option>
+            </select>
+            <span class="field-icon">▾</span>
+          </div>
+
+          <div class="notched-field has-icon">
+            <label>Date of Incorporation <span class="req">*</span></label>
+            <input type="date" formControlName="dateOfIncorporation" />
+            <span class="field-icon">📅</span>
+          </div>
+
+          <div class="notched-field">
+            <label>Registration Number <span class="req">*</span></label>
+            <input type="text" formControlName="registrationNumber" />
+          </div>
+
+          <div class="notched-field">
+            <label>TIN Number</label>
+            <input type="text" formControlName="tinNumber" />
+          </div>
+        </div>
+
+        <h3 class="section-title">Business Operation Details</h3>
+        <div class="notched-grid">
+          <div class="notched-field">
+            <label>No of years in Operation <span class="req">*</span></label>
+            <input type="number" formControlName="yearsInOperation" />
+          </div>
+
+          <div class="notched-field">
+            <label>Number of Employees <span class="req">*</span></label>
+            <input type="number" formControlName="numberOfEmployees" />
+          </div>
+
+          <div class="notched-field">
+            <label>Annual Turnover (Last Fiscal Year) <span class="req">*</span></label>
+            <input type="text" formControlName="annualTurnover" />
+          </div>
+
+          <div class="notched-field">
+            <label>AVE stock Level <span class="req">*</span></label>
+            <input type="text" formControlName="aveStockLevel" />
+          </div>
+
+          <div class="notched-field">
+            <label>Telephone</label>
+            <input type="text" formControlName="telephone" />
+          </div>
+
+          <div class="radio-group inline-in-grid">
+            <span class="radio-question">Is the business labor or capital intensive?</span>
+            <span class="radio-options">
+              <label><input type="radio" value="Capital" formControlName="laborOrCapital" /> Capital</label>
+              <label><input type="radio" value="Labour" formControlName="laborOrCapital" /> Labour</label>
+            </span>
+          </div>
+
+          <div class="radio-group inline-in-grid span-2">
+            <span class="radio-question">Does the business have an existing banking relationship with us?</span>
+            <span class="radio-options">
+              <label><input type="radio" value="Yes" formControlName="hasBankingRelationship" /> Yes</label>
+              <label><input type="radio" value="No" formControlName="hasBankingRelationship" /> No</label>
+            </span>
+          </div>
+        </div>
+
+        <h3 class="section-title">Primary Contact &amp; Relationship Info</h3>
+        <div class="notched-grid">
+          <div class="notched-field">
+            <label>Primary Contact Name <span class="req">*</span></label>
+            <input type="text" formControlName="primaryContactName" />
+          </div>
+
+          <div class="notched-field has-icon">
+            <label>Designation/Role <span class="req">*</span></label>
+            <select formControlName="designationRole">
+              <option value="" disabled selected></option>
+              <option>Owner</option>
+              <option>Director</option>
+              <option>Manager</option>
+              <option>Accountant</option>
+              <option>Other</option>
+            </select>
+            <span class="field-icon">▾</span>
+          </div>
+
+          <div class="notched-field phone-field">
+            <label>Contact Phone Number <span class="req">*</span></label>
+            <div class="field-inner">
+              <select class="code-select" formControlName="contactCountryCode">
+                <option>+91</option>
+                <option>+233</option>
+                <option>+234</option>
+                <option>+1</option>
+              </select>
+              <span class="code-divider">|</span>
+              <input type="text" formControlName="contactPhoneNumber" />
+            </div>
+          </div>
+
+          <div class="notched-field">
+            <label>Email Address</label>
+            <input type="email" formControlName="emailAddress" />
+          </div>  
+
+          <div class="notched-field span-2">
+            <label>Business Address</label>
+            <input type="text" formControlName="businessAddress" />
+          </div>
+
+          <div class="notched-field span-2">
+            <label>Parent Company</label>
+            <input type="text" formControlName="parentCompany" />
+          </div>
+        </div>
+
+        <h3 class="section-title">Additional Details</h3>
+        <div class="notched-grid">
+          <div class="notched-field span-2">
+            <label>Customer Description</label>
+            <textarea rows="4" formControlName="customerDescription"></textarea>
+          </div>
+          <div class="notched-field span-2">
+            <label>Description of Business</label>
+            <textarea rows="4" formControlName="descriptionOfBusiness"></textarea>
+          </div>
+        </div>
+          <!-- ================= ACTION BUTTONS (Back + Next) ================= -->
+  <div class="bottom-action-bar">
+    <button type="button" class="btn btn-back" (click)="onBack()">Back</button>
+    <button type="button" class="btn btn-next" [disabled]="businessForm.invalid" (click)="onNext()">Next</button>
+  </div>
+
+      </div> <!-- accordion-body end -->
+    </div> <!-- active accordion-section end -->
+
+    <!-- ==================== PENDING FUTURE STEPS ==================== -->
+    <div class="accordion-section disabled-section" *ngFor="let step of steps.slice(4)">
+      <div class="accordion-header static">
+        <span class="header-icon pending"></span>
+        <span class="header-name disabled-text">{{ step.name }}</span>
+      </div>
+    </div>
+
+  </div> <!-- accordion end -->
+
+</div> <!-- wrap end -->

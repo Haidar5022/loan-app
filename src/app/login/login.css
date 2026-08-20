@@ -1,1 +1,146 @@
-/* Shared styles (.field, .btn, .promo, .toast) live in src/styles.css */
+/* Shared styles (.field, .btn, .promo, .toast) live in src/styles.css *//* Screen Host - Scroll Functional but Scrollbar Invisible */
+/* `:host` ko responsive width/height ke sath update karein */
+:host {
+  display: block !important;
+  width: 100% !important;      /* 1320px hata kar 100% karein */
+  min-height: 100vh !important; /* 900px hata kar 100vh karein */
+  margin: 0 !important;
+  padding: 0 !important;
+  background-color: #ffffff !important;
+  overflow: hidden !important;
+}
+
+:host::-webkit-scrollbar {
+  display: none !important;
+  
+}
+
+/* Page Wrapper */
+.page-wrapper {
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box;
+  -ms-overflow-style: none !important;
+  scrollbar-width: none !important;
+}
+
+.page-wrapper::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
+}
+
+/* Main Split Card Frame (1440px) */
+.login-card {
+  display: flex !important;
+  flex-direction: row !important; /* Forces Side-by-Side Layout */
+  width: 100%;
+  max-width: 1440px;
+  min-height: 100vh;
+  background: #ffffff;
+  border-radius: 0px;
+  overflow: hidden;
+  box-shadow: none;
+  margin: 0 !important;
+}
+
+/* Left Half Image Banner (Strict 50%) */
+.left-banner {
+  width: 100% !important;
+  height: 100% !important;
+  border-radius: 36px;
+  padding: 8px;
+  gap: 10px;
+  flex: 0 0 50% !important;
+  position: center;
+  
+}
+
+.banner-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* 1. Main Right Form Wrapper */
+.right-form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 0 0 50%;
+  width: 50%;
+  height: 100vh;
+  display: flex;
+  justify-content: center; /* Horizontally center .form-container */
+  align-items: flex-start;     /* Vertically center .form-container */
+  box-sizing: border-box;
+}
+
+/* 2. Form Container (430px) */
+.form-container {
+  width: 430px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;    /* Ensure saare elements (input, button, promo) full 430px width lein */
+  gap: 24px;
+  padding-top: 210px;  /* Adjust as needed for vertical centering */
+}
+
+/* 3. Text Alignment */
+.instruction-text {
+  text-align: center;
+  margin-bottom: 10px;
+ 
+  
+}
+
+/* 4. Custom Field - Input box & Button Ko Exact 100% Width Par Force Karein */
+.custom-field{ border-radius: 12px;
+
+}
+.submit-btn{
+  width: 100% !important;
+  height: 48px !important;
+  border-radius: 24px !important;
+  background-color: #0055a5 !important; /* Figma Ocean Blue */
+  color: #ffffff !important;
+  font-size: 15px !important;
+  font-weight: 500 !important;
+  border: none !important;
+  margin-bottom: 12px !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+.promo-card {
+  width: 100% !important;  /* 430px ka 100% (yani exact 430px) */
+}
+
+/* 5. Material Input Internal Overrides */
+::ng-deep .custom-field .mat-mdc-form-field-flex {
+  width: 100% !important;
+  
+}
+
+::ng-deep .custom-field .mdc-text-field--outlined {
+  height: 56px !important;
+  border-radius: 10px !important;
+  --mdc-outlined-text-field-container-shape: 10px !important;
+}
+::ng-deep button.submit-btn {
+  margin-top: -10px !important;
+  margin-bottom: 10px !important;
+}
+/* Account Input Box Margin Customization */
+.custom-field {
+  width: 100% !important;
+  margin-top: 0px !important;    /* Instruction text aur input field ke beech ka space */
+  margin-bottom: 0px !important; /* Input field aur Continue button ke beech ka space */
+}

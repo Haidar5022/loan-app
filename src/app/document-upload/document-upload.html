@@ -1,0 +1,237 @@
+<div class="wrap">
+
+  <!-- ============ Top Navbar ============ -->
+  <header class="topbar">
+    <div class="brand">Rumango <strong>ICUST Bank</strong></div>
+  </header>
+
+  <!-- ============ Header Card ============ -->
+  <div class="main-card">
+    <div class="heading-row">
+      <div>
+        <h1 class="page-title">Business Loan</h1>
+        <p class="page-subtitle">"Get your Loan account in just 11 steps"</p>
+      </div>
+      <div class="ref-badge">Ref Number: <strong>{{ refNumber }}</strong></div>
+    </div>
+
+    <div class="progress-track">
+      <div class="progress-fill" [style.width.%]="progressPercent"></div>
+    </div>
+
+    <!-- Stepper Row -->
+    <div class="stepper-row">
+      <button class="scroll-arrow" (click)="scrollStepper(-1)" aria-label="Scroll left">‹</button>
+
+      <div class="stepper-track" #stepperTrack>
+        <ng-container *ngFor="let step of steps; let i = index; let last = last">
+          <div
+            class="step-node"
+            [class.completed]="step.status === 'completed'"
+            [class.active]="step.status === 'active'"
+          >
+            <span class="step-icon">{{ getStepIcon(step.status) }}</span>
+            <div class="step-text">
+              <div class="step-name">{{ step.name }}</div>
+              <div class="step-stage">Stage {{ step.stage }}</div>
+            </div>
+          </div>
+          <div class="step-connector" *ngIf="!last" [class.filled]="step.status === 'completed'"></div>
+        </ng-container>
+      </div>
+
+      <button class="scroll-arrow" (click)="scrollStepper(1)" aria-label="Scroll right">›</button>
+    </div>
+  </div>
+
+  <!-- ============ Accordion Container ============ -->
+  <div class="accordion">
+
+    <!-- 1. LOAN DETAILS ACCORDION SECTION (Dropdown Mode) -->
+    <div class="accordion-section" [class.is-expanded]="isLoanDetailsOpen">
+      <div class="accordion-header" (click)="toggleLoanDetails()" style="cursor: pointer;">
+        <div class="header-left">
+          <span class="header-icon completed">✓</span>
+          <span class="header-name">Loan Details</span>
+        </div>
+        <span class="chevron" [class.open]="isLoanDetailsOpen">▾</span>
+      </div>
+
+      <!-- Loan Details HTML loads inside dropdown -->
+      <div class="accordion-body" *ngIf="isLoanDetailsOpen">
+        <app-loan-application>
+          [showHeader]="False"
+          [showStepper]="false">
+        </app-loan-application>
+      </div>
+    </div>
+
+    <!-- 2. DOCUMENT UPLOAD SECTION (Active) -->
+    <div class="accordion-section is-expanded">
+      <div class="accordion-header static">
+        <span class="header-icon active">◐</span>
+        <span class="header-name">Document Upload</span>
+      </div>
+
+      <div class="accordion-body">
+        <div class="upload-toolbar">
+          <div class="info-note">
+            <span class="info-icon">ⓘ</span>
+            Address Proof and ID Proof are mandatory. To upload another document, click 'Add' button, select the Document, and upload.
+          </div>
+
+          <div class="add-doc-wrap">
+            <button type="button" class="btn btn-secondary add-doc-btn" (click)="toggleAddDocumentMenu()">
+              Add Document <span class="chevron">▾</span>
+            </button>
+            <div class="add-doc-menu" *ngIf="addDocumentMenuOpen">
+              <button type="button" (click)="addDocument('Document 1')">Document 1</button>
+              <button type="button" (click)="addDocument('Document 2')">Document 2</button>
+              <button type="button" (click)="addDocument('Document 3')">Document 3</button>
+            </div>
+          </div>
+        </div>
+
+        <input type="file" #hiddenFileInput class="hidden-file-input" (change)="onFileChosen($event)" />
+
+        <form [formGroup]="form">
+          <div class="doc-list" formArrayName="documents">
+            <div
+              class="doc-item"
+              *ngFor="let docGroup of documentsArray.controls; let i = index"
+              [formGroupName]="i"
+            >
+
+              <!-- Bank Statement (First Item) -->
+              <ng-container *ngIf="i === 0; else normalDocRow">
+                <div class="doc-row no-toggle">
+                  <span class="header-icon" [class.completed]="docGroup.get('fileName')!.value">
+                    {{ docGroup.get('fileName')!.value ? '✓' : '' }}
+                  </span>
+                  <span class="doc-name">
+                    {{ docGroup.get('name')!.value }}
+                    <span class="req" *ngIf="docGroup.get('required')!.value">*</span>
+                  </span>
+                </div>
+              </ng-container>
+
+              <!-- Other Dynamic Documents -->
+              <ng-template #normalDocRow>
+                <div class="doc-row" (click)="toggleExpand(docGroup)">
+                  <span class="header-icon" [class.completed]="docGroup.get('fileName')!.value">
+                    {{ docGroup.get('fileName')!.value ? '✓' : '' }}
+                  </span>
+                  <span class="doc-name">
+                    {{ docGroup.get('name')!.value }}
+                    <span class="req" *ngIf="docGroup.get('required')!.value">*</span>
+                  </span>
+                  <span class="doc-row-actions" (click)="$event.stopPropagation()">
+                    <a
+                      class="delete-link"
+                      [class.enabled]="docGroup.get('removable')!.value"
+                      (click)="removeDocument(i)"
+                    >Delete</a>
+                    <span
+                      class="chevron"
+                      [class.open]="docGroup.get('expanded')!.value"
+                      (click)="toggleExpand(docGroup)"
+                    >▾</span>
+                  </span>
+                </div>
+              </ng-template>
+
+              <div class="doc-body" *ngIf="docGroup.get('expanded')!.value">
+                <h4 class="doc-subtitle">Uploaded Data</h4>
+
+                <div class="file-card" *ngIf="docGroup.get('fileName')!.value">
+                  <span class="file-icon">📄</span>
+                  <span class="file-name">{{ docGroup.get('fileName')!.value }}</span>
+                  <button type="button" class="file-remove" (click)="removeFile(i)">🗑</button>
+                </div>
+
+                <button
+                  type="button"
+                  class="upload-placeholder"
+                  *ngIf="!docGroup.get('fileName')!.value"
+                  (click)="triggerUpload(i)"
+                >
+                  + Upload file
+                </button>
+
+                <!-- Fetch Details Section -->
+                <div class="fetch-details" *ngIf="docGroup.get('hasFetchDetails')!.value">
+                  <ng-container *ngIf="docGroup.get('fetchDetails') as fd">
+                    <div class="fetch-header">
+                      <h4>Fetch Details</h4>
+                      <span class="chevron open">▴</span>
+                    </div>
+                    <div class="fetch-grid">
+                      <div class="fetch-field">
+                        <span class="fetch-label">Account Holder Name</span>
+                        <span class="fetch-value">{{ fd.get('accountHolderName')!.value }}</span>
+                      </div>
+                      <div class="fetch-field">
+                        <span class="fetch-label">Account Number</span>
+                        <span class="fetch-value link">{{ fd.get('accountNumber')!.value }}</span>
+                      </div>
+                      <div class="fetch-field">
+                        <span class="fetch-label">Bank Name</span>
+                        <span class="fetch-value">{{ fd.get('bankName')!.value }}</span>
+                      </div>
+                      <div class="fetch-field">
+                        <span class="fetch-label">IFSC Code</span>
+                        <span class="fetch-value">{{ fd.get('ifscCode')!.value }}</span>
+                      </div>
+                      <div class="fetch-field">
+                        <span class="fetch-label">Branch Name</span>
+                        <span class="fetch-value">{{ fd.get('branchName')!.value }}</span>
+                      </div>
+                      <div class="fetch-field">
+                        <span class="fetch-label">Statement Period</span>
+                        <span class="fetch-value">{{ fd.get('statementPeriod')!.value }}</span>
+                      </div>
+                      <div class="fetch-field">
+                        <span class="fetch-label">Total Debits</span>
+                        <span class="fetch-value">{{ fd.get('totalDebits')!.value }}</span>
+                      </div>
+                      <div class="fetch-field">
+                        <span class="fetch-label">Total Credits</span>
+                        <span class="fetch-value">{{ fd.get('totalCredits')!.value }}</span>
+                      </div>
+                    </div>
+
+                    <div class="fetch-actions">
+                      <button type="button" class="btn-fetch-edit" (click)="onEditFetchDetails()">
+                        {{ isEditingFetchDetails ? 'Save' : 'Edit' }}
+                      </button>
+                      <button type="button" class="btn-fetch-rescan" (click)="onReScan(i)">Re-Scan</button>
+                    </div>
+                  </ng-container>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        </form>
+
+        <div class="step-actions">
+          <button type="button" class="btn-nav-back" (click)="onBack()">Back</button>
+          <button type="button" class="btn-nav-next" (click)="onNext()">Next</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 3. Pending Collapsed Sections -->
+    <div class="accordion-section is-disabled" *ngFor="let step of steps.slice(3)">
+      <div class="accordion-header static">
+        <span class="header-icon"></span>
+        <span class="header-name">{{ step.name }}</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer -->
+  <footer class="page-footer">@2025 Rumango. All rights reserved</footer>
+
+</div>

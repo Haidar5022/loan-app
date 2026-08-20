@@ -1,0 +1,206 @@
+<div class="page-container">
+  <!-- Top Navbar -->
+  <header class="navbar">
+    <div class="logo">
+      <span class="logo-symbol">SBM</span> bank
+    </div>
+  </header>
+
+  <!-- Main Content Layout -->
+  <div class="main-layout">
+    <!-- Left Sidebar / Stepper -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <h2>Your application</h2>
+        <p>No paperwork — finish in one sitting.</p>
+      </div>
+
+      <!-- Circular Progress Card -->
+      <div class="progress-card">
+        <div class="circle-progress">
+          <svg viewBox="0 0 36 36" class="circular-chart">
+            <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+            <path class="circle" stroke-dasharray="60, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+          </svg>
+        </div>
+        <div class="progress-text">
+          <strong>Create Account</strong>
+          <span>60% complete</span>
+        </div>
+      </div>
+
+      <!-- Stepper List -->
+      <ul class="stepper">
+        <li class="completed">
+          <span class="step-icon">✓</span>
+          <div class="step-content">
+            <strong>Choose Product</strong>
+            <ul><li>Pick your account</li></ul>
+          </div>
+        </li>
+        <li class="completed">
+          <span class="step-icon">✓</span>
+          <div class="step-content">
+            <strong>Verify Identity</strong>
+            <ul>
+              <li>Scan ID</li>
+              <li>Your Selfie</li>
+            </ul>
+          </div>
+        </li>
+        <li class="active">
+          <span class="step-icon"></span>
+          <div class="step-content">
+            <strong>Your Details</strong>
+            <ul>
+              <li class="current">Contact</li>
+              <li>Work</li>
+              <li>Preferences</li>
+            </ul>
+          </div>
+        </li>
+        <li class="pending">
+          <span class="step-icon"></span>
+          <div class="step-content">
+            <strong>Review & Confirm</strong>
+            <ul>
+              <li>Agreement</li>
+              <li>Review</li>
+            </ul>
+          </div>
+        </li>
+        <li class="pending">
+          <span class="step-icon"></span>
+          <div class="step-content">
+            <strong>Done</strong>
+          </div>
+        </li>
+      </ul>
+    </aside>
+
+    <!-- Right Main Form Section -->
+    <main class="form-container">
+      <div class="form-header">
+        <h1>Confirm your details</h1>
+        <p>We read these from your documents. Please review before continuing.</p>
+      </div>
+
+      <div class="card">
+        <!-- Tabs -->
+        <div class="tab-header">
+          <button [class.active]="activeTab === 'basic'" (click)="setTab('basic')">Basic Informations</button>
+          <button [class.active]="activeTab === 'address'" (click)="setTab('address')">Address</button>
+        </div>
+
+        <!-- Form Body -->
+        <form [formGroup]="detailsForm" *ngIf="activeTab === 'basic'" class="form-grid">
+          <h3>Basic Informations</h3>
+
+          <div class="grid-container">
+            <!-- Title -->
+            <div class="input-group">
+              <label>Title *</label>
+              <select formControlName="title">
+                <option *ngFor="let t of titles" [value]="t">{{t}}</option>
+              </select>
+            </div>
+
+            <!-- First Name -->
+            <div class="input-group">
+              <label>First Name*</label>
+              <input type="text" formControlName="firstName" />
+            </div>
+
+            <!-- Middle Name -->
+            <div class="input-group">
+              <label>Middle Name</label>
+              <input type="text" formControlName="middleName" />
+            </div>
+
+            <!-- Last Name -->
+            <div class="input-group">
+              <label>Last Name*</label>
+              <input type="text" formControlName="lastName" />
+            </div>
+
+            <!-- Date of Birth -->
+            <div class="input-group">
+              <label>Date of Birth*</label>
+              <input type="date" formControlName="dateOfBirth" />
+            </div>
+
+            <!-- Gender -->
+            <div class="input-group">
+              <label>Gender*</label>
+              <select formControlName="gender">
+                <option *ngFor="let g of genders" [value]="g">{{g}}</option>
+              </select>
+            </div>
+
+            <!-- ID Number -->
+            <div class="input-group">
+              <label>ID Number*</label>
+              <input type="text" formControlName="idNumber" />
+            </div>
+
+            <!-- Nationality -->
+            <div class="input-group">
+              <label>Nationality*</label>
+              <select formControlName="nationality">
+                <option *ngFor="let n of nationalities" [value]="n">{{n}}</option>
+              </select>
+            </div>
+
+            <!-- Country of Residence -->
+            <div class="input-group">
+              <label>Country of residence*</label>
+              <select formControlName="countryOfResidence">
+                <option *ngFor="let c of nationalities" [value]="c">{{c}}</option>
+              </select>
+            </div>
+
+            <!-- Marital Status -->
+            <div class="input-group">
+              <label>Marital status*</label>
+              <select formControlName="maritalStatus">
+                <option *ngFor="let m of maritalStatuses" [value]="m">{{m}}</option>
+              </select>
+            </div>
+
+            <!-- Mobile Number -->
+            <div class="input-group full-width-mobile">
+              <label>Mobile Number *</label>
+              <div class="phone-input-wrapper">
+                <select formControlName="countryCode" class="code-select">
+                  <option *ngFor="let code of countryCodes" [value]="code">{{code}}</option>
+                </select>
+                <input type="text" formControlName="mobileNumber" />
+                <span class="valid-icon">✓</span>
+              </div>
+            </div>
+
+            <!-- Email -->
+            <div class="input-group">
+              <label>Email*</label>
+              <div class="email-input-wrapper">
+                <input type="email" formControlName="email" />
+                <button type="button" class="verify-btn" (click)="verifyOtp()">Verify OTP</button>
+              </div>
+            </div>
+          </div>
+        </form>
+
+        <div *ngIf="activeTab === 'address'" class="tab-placeholder">
+          <p>Address details section goes here.</p>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="form-actions">
+        <button type="button" class="btn btn-outline" (click)="onBack()">Back</button>
+        <button type="button" class="btn btn-outline" (click)="onSaveDraft()">Save Draft</button>
+        <button type="button" class="btn btn-primary" (click)="onContinue()">Continue</button>
+      </div>
+    </main>
+  </div>
+</div>

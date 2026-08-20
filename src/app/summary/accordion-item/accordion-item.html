@@ -1,0 +1,22 @@
+<div class="acc-row" [class.open]="isOpen">
+  <div class="acc-header" (click)="onHeaderClick()">
+    <div class="acc-header-left">
+      <span class="acc-status-icon" [class.summary-icon]="isSummary">
+        <svg *ngIf="isCompleted && !isSummary" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="3">
+          <polyline points="20 6 9 17 4 12"></polyline>
+        </svg>
+        <span *ngIf="isSummary" class="half-circle">◐</span>
+      </span>
+      <span class="acc-title">{{ title }}</span>
+    </div>
+    <span class="acc-arrow" [class.rotated]="isOpen">
+      <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="#64748b" stroke-width="2">
+        <polyline points="6 9 12 15 18 9"></polyline>
+      </svg>
+    </span>
+  </div>
+
+  <div class="acc-body" *ngIf="isOpen">
+    <ng-content></ng-content>
+  </div>
+</div>

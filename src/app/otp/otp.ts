@@ -1,90 +1,104 @@
-import { Component, OnDestroy, OnInit, inject } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
-import { OnboardingService } from '../onboarding.service';
+import { Component, OnInit, OnDestroy, ChangeDetectorRef, NgZone } from '@angular/core';
+import { CommonModule, Location } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { Router, ActivatedRoute } from '@angular/router';
+
+// Angular Material Modules
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-otp',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [
+    CommonModule, 
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule
+  ],
   templateUrl: './otp.html',
-  styleUrl: './otp.css'
+  styleUrls: ['./otp.css']
 })
-export class Otp implements OnInit, OnDestroy {
-  private fb = inject(FormBuilder);
-  private router = inject(Router);
-  private onboarding = inject(OnboardingService);
+export class OtpComponent implements OnInit, OnDestroy {
+  accountNo: string = '';
+  otp: string = '';
+  otpError: boolean = false;
+  
+  timerSeconds: number = 30;
+  timerText: string = '0:30sec';
+  intervalId: any;
 
-  accountNo = '';
-  secondsLeft = 30;
-  resendEnabled = false;
-  showToast = false;
-
-  private countdownHandle: ReturnType<typeof setInterval> | null = null;
-
-  form: FormGroup = this.fb.group({
-    otp: ['', [Validators.required, Validators.pattern(/^[0-9]{4}$/)]]
-  });
-
-  get otp() {
-    return this.form.get('otp')!;
-  }
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute,
+    private location: Location,
+    private cdRef: ChangeDetectorRef,
+    private ngZone: NgZone
+  ) {}
 
   ngOnInit(): void {
-    this.accountNo = this.onboarding.getAccountNo();
-    if (!this.accountNo) {
-      this.router.navigate(['/login']);
-      return;
+    this.route.queryParams.subscribe(params => {
+      this.accountNo = params['acc'] || '546136451323';
+    });
+    this.startTimer();
+  }
+
+  startTimer(): void {
+    this.timerSeconds = 30;
+    this.updateTimerText();
+
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
     }
-    this.startCountdown();
+
+    // Angular NgZone me timer run karenge real-time update ke liye
+    this.ngZone.runOutsideAngular(() => {
+      this.intervalId = setInterval(() => {
+        if (this.timerSeconds > 0) {
+          this.timerSeconds--;
+          this.ngZone.run(() => {
+            this.updateTimerText();
+            this.cdRef.detectChanges(); // Force Real-time Screen Render
+          });
+        } else {
+          clearInterval(this.intervalId);
+        }
+      }, 1000);
+    });
   }
 
-onSubmit(): void {
-  if (this.otp.invalid) {
-    this.otp.markAsTouched();
-    return;
-  }
-  this.showToast = true;
-
-  // 1 second baad user ko automatic Loan Calculator page par bhej do
-  setTimeout(() => {
-    this.router.navigate(['/loan-calculator']);
-  }, 1000);
-}
-
-onBack(): void {
-  this.router.navigate(['/login']);
-}
-
-  onResend(): void {
-    if (!this.resendEnabled) return;
-    this.otp.reset('');
-    this.showToast = false;
-    this.startCountdown();
+  updateTimerText(): void {
+    const sec = this.timerSeconds < 10 ? `0${this.timerSeconds}` : `${this.timerSeconds}`;
+    this.timerText = `0:${sec}sec`;
   }
 
-  private startCountdown(): void {
-    this.secondsLeft = 30;
-    this.resendEnabled = false;
-    this.stopCountdown();
-    this.countdownHandle = setInterval(() => {
-      this.secondsLeft--;
-      if (this.secondsLeft <= 0) {
-        this.stopCountdown();
-        this.resendEnabled = true;
-      }
-    }, 1000);
-  }
-
-  private stopCountdown(): void {
-    if (this.countdownHandle) {
-      clearInterval(this.countdownHandle);
-      this.countdownHandle = null;
+  resendOtp(): void {
+    if (this.timerSeconds === 0) {
+      this.otpError = false;
+      this.otp = '';
+      this.startTimer();
     }
+  }
+
+  onVerify(): void {
+    if (this.otp && this.otp.length >= 4) {
+      this.otpError = false;
+      // Navigate to your existing Loan Calculator page
+      this.router.navigate(['/loan-calculator']);
+    } else {
+      this.otpError = true;
+    }
+  }
+
+  goBack(): void {
+   this.router.navigate(['./login'])
   }
 
   ngOnDestroy(): void {
-    this.stopCountdown();
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+    }
   }
 }

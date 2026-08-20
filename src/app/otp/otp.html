@@ -1,43 +1,57 @@
-<p class="eyebrow">Enter your Account number to get started.</p>
-
-<div class="field">
-  <label>Account No *</label>
-  <input type="text" [value]="accountNo" disabled />
-</div>
-
-<form [formGroup]="form" (ngSubmit)="onSubmit()">
-
-  <div class="field" [class.invalid]="otp.invalid && otp.touched">
-    <label>Enter OTP</label>
-    <input
-      type="password"
-      formControlName="otp"
-      inputmode="numeric"
-      maxlength="4"
-      autocomplete="off"
-    />
-    <div class="error-msg">Please enter the 4-digit OTP.</div>
-    <div class="otp-meta">
-      Didn't receive the OTP?
-      <span class="timer" *ngIf="!resendEnabled">
-        (0:{{ secondsLeft < 10 ? '0' + secondsLeft : secondsLeft }}sec)
-      </span>
-      <a class="resend-link" [class.disabled]="!resendEnabled" (click)="onResend()">Resend OTP</a>
+<div class="page-wrapper">
+  <div class="login-card">
+    
+    <!-- Left Half Image Banner -->
+    <div class="left-banner">
+      
+        <img src="images/otp1.jpg" alt="Otp-Banner" class="banner-img" />
+      
     </div>
-  </div>
 
-  <div class="toast" [class.show]="showToast">
-    ✅ Verified! In a real app, this would take you to the next onboarding step.
-  </div>
+    <!-- Right Half Form Section -->
+    <div class="right-form">
+      <div class="form-container">
+        
+        <p class="instruction-text">Enter verification code sent to your registered mobile.</p>
 
-  <button type="submit" class="btn btn-primary">Submit</button>
-  <button type="button" class="btn btn-secondary show btn-row-spacer" (click)="onBack()">Back</button>
-</form>
+        <!-- Account No Readonly Field -->
+        <mat-form-field appearance="outline" class="custom-field">
+          <mat-label>Account No *</mat-label>
+          <input matInput [value]="accountNo" readonly />
+        </mat-form-field>
 
-<div class="promo">
-  <div class="promo-image crypto"></div>
-  <div class="promo-copy">
-    <div class="title">Get Personal Loans at Just 8.99%!</div>
-    <div class="sub">Flexible tenure options and easy EMIs.</div>
+        <!-- OTP Input Field -->
+        <mat-form-field appearance="outline" class="custom-field" [class.mat-form-field-invalid]="otpError">
+          <mat-label>Enter OTP *</mat-label>
+          <input 
+            matInput 
+            type="password" 
+            maxlength="6" 
+            [(ngModel)]="otp" 
+            placeholder="••••" 
+            (keyup.enter)="onVerify()"
+          />
+          <mat-error *ngIf="otpError">Please enter valid OTP</mat-error>
+        </mat-form-field>
+
+        <!-- Resend OTP Timer Row -->
+        <div class="resend-row">
+          Didn't receive the OTP? 
+          <span class="timer">({{ timerText }})</span> 
+          <a href="javascript:void(0)" (click)="resendOtp()" class="resend-link">Resend OTP</a>
+        </div>
+
+        <!-- Action Buttons -->
+        <button mat-raised-button color="primary" class="submit-btn" (click)="onVerify()">Submit</button>
+        <button mat-stroked-button class="back-btn" (click)="goBack()">Back</button>
+
+        <!-- Bottom Promo Card -->
+        <div class="promo-card">
+          <img src="images/otp2.jpg" alt="Promo" class="promo-img" />
+        </div>
+
+      </div>
+    </div>
+
   </div>
 </div>

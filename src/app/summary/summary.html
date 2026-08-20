@@ -1,0 +1,327 @@
+<div class="summary-wrapper">
+
+  <!-- TOP HEADER -->
+  <header class="topbar">
+    <div class="brand">Rumango <strong>ICUST Bank</strong></div>
+  </header>
+
+  <div class="content-container">
+
+    <!-- SINGLE COMBINED UPPER BOX (TITLE + STEPPER) -->
+    <div class="main-header-card">
+      <h2 class="page-title">Business Loan</h2>
+      <p class="page-subtitle">“Get your Loan account in just 11 steps”</p>
+
+      <!-- STEPPER ROW -->
+      <div class="stepper-scroll-container">
+        <ng-container *ngFor="let s of stages; let last = last">
+          <div class="step-cell" [ngClass]="s.status">
+            <!-- Top Connected Line Segment -->
+            <div class="top-line-segment" [class.done-track]="s.status === 'done'"></div>
+
+            <!-- Step Body (Icon + Text) -->
+            <div class="step-info">
+              <span class="step-icon" [ngClass]="s.status">
+                <svg *ngIf="s.status === 'done'" viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="3.5">
+                  <polyline points="20 6 9 17 4 12"></polyline>
+                </svg>
+                <span *ngIf="s.status === 'active'" class="half-icon">◐</span>
+              </span>
+
+              <div class="step-text">
+                <span class="st-name">{{ s.name }}</span>
+                <span class="st-num">{{ s.stage }}</span>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+      </div>
+    </div>
+
+    <!-- ACCORDIONS CONTAINER -->
+    <div class="accordion-shell">
+      
+      <!-- 1. Loan Details -->
+      <app-accordion-item title="Loan Details" itemId="loanDetails" [isOpen]="openSectionId === 'loanDetails'" (toggle)="handleToggle($event)">
+        <h4 class="sec-heading">Loan Details</h4>
+        <div class="grid-4">
+          <div class="field-box"><span class="lbl">Loan Amount Requested (GHS)*</span><span class="val">{{ summaryData.loanDetails.amountRequested }}</span></div>
+          <div class="field-box"><span class="lbl">Interest Payable</span><span class="val">{{ summaryData.loanDetails.interestPayable }}</span></div>
+          <div class="field-box"><span class="lbl">Tenure</span><span class="val">{{ summaryData.loanDetails.tenure }}</span></div>
+          <div class="field-box"><span class="lbl">Total Principal Amount</span><span class="val">{{ summaryData.loanDetails.totalPrincipal }}</span></div>
+          <div class="field-box"><span class="lbl">Interest Rate %</span><span class="val">{{ summaryData.loanDetails.interestRate }}</span></div>
+          <div class="field-box"><span class="lbl">Total Payable Amount</span><span class="val">{{ summaryData.loanDetails.totalPayable }}</span></div>
+          <div class="field-box"><span class="lbl">EMI Amount</span><span class="val">{{ summaryData.loanDetails.emiAmount }}</span></div>
+        </div>
+
+        <h4 class="sec-heading mt">Repayment Details</h4>
+        <div class="grid-4">
+          <div class="field-box"><span class="lbl">Repayment Frequency</span><span class="val">{{ summaryData.loanDetails.repaymentFreq }}</span></div>
+          <div class="field-box"><span class="lbl">EMI Start Date</span><span class="val">{{ summaryData.loanDetails.emiStartDate }}</span></div>
+        </div>
+
+        <h4 class="sec-heading mt">Loan Purpose</h4>
+        <div class="grid-4">
+          <div class="field-box"><span class="lbl">Repayment Frequency</span><span class="val">{{ summaryData.loanDetails.loanPurpose }}</span></div>
+          <div class="field-box"><span class="lbl">Repayment Frequency</span><span class="val">{{ summaryData.loanDetails.loanPurpose }}</span></div>
+          <div class="field-box"><span class="lbl">Repayment Frequency</span><span class="val">{{ summaryData.loanDetails.loanPurpose }}</span></div>
+          <div class="field-box"><span class="lbl">Repayment Frequency</span><span class="val">{{ summaryData.loanDetails.loanPurpose }}</span></div>
+        </div>
+
+        <h4 class="sec-heading mt">Credit Facility Details</h4>
+        <div class="grid-4">
+          <div class="field-box"><span class="lbl">Type of Credit Facility Required</span><span class="val">{{ summaryData.loanDetails.creditFacilityRequired }}</span></div>
+          <div class="field-box"><span class="lbl">Do you have collateral to offer?</span><span class="val">{{ summaryData.loanDetails.collateralOffer }}</span></div>
+          <div class="field-box span-2"><span class="lbl">Do you have a current credit facility with us or any other financial institution?</span><span class="val">{{ summaryData.loanDetails.currentCreditFacility }}</span></div>
+        </div>
+      </app-accordion-item>
+
+      <!-- 2. Document Upload -->
+      <app-accordion-item title="Document Upload" itemId="docUpload" [isOpen]="openSectionId === 'docUpload'" (toggle)="handleToggle($event)">
+        <h4 class="sec-heading">Document Upload</h4>
+        <div class="nested-box-group">
+          <!-- Last 6 Months Bank Statement -->
+          <div class="nested-box">
+            <div class="nested-header" (click)="toggleNested('bankStatement')">
+              <span class="header-title-text"><span class="green-check">●</span> Last 6 Months Bank Statement *</span>
+              <span class="arrow" [class.rotated]="nestedOpen['bankStatement']">▲</span>
+            </div>
+            <div class="nested-content" *ngIf="nestedOpen['bankStatement']">
+              <div class="file-tag-row">
+                <div class="file-tag">
+                  <span class="file-preview-icon">📄</span>
+                  <span class="file-name">Statement_Doc_1.jpg</span>
+                  <span class="del" title="Delete">🗑️</span>
+                </div>
+                <div class="file-tag">
+                  <span class="file-preview-icon">📄</span>
+                  <span class="file-name">Statement_Doc_2.jpg</span>
+                  <span class="del" title="Delete">🗑️</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Balance Sheet -->
+          <div class="nested-box">
+            <div class="nested-header" (click)="toggleNested('balanceSheet')">
+              <span class="header-title-text"><span class="green-check">●</span> Balance Sheet *</span>
+              <span class="arrow" [class.rotated]="nestedOpen['balanceSheet']">▲</span>
+            </div>
+            <div class="nested-content" *ngIf="nestedOpen['balanceSheet']">
+              <p class="file-placeholder">No documents uploaded.</p>
+            </div>
+          </div>
+
+          <!-- Registration Certificate -->
+          <div class="nested-box">
+            <div class="nested-header" (click)="toggleNested('regCert')">
+              <span class="header-title-text"><span class="green-check">●</span> Registration Certificate *</span>
+              <span class="arrow" [class.rotated]="nestedOpen['regCert']">▲</span>
+            </div>
+            <div class="nested-content" *ngIf="nestedOpen['regCert']">
+              <p class="file-placeholder">No documents uploaded.</p>
+            </div>
+          </div>
+
+          <!-- Incorporation Certificate -->
+          <div class="nested-box">
+            <div class="nested-header" (click)="toggleNested('incorpCert')">
+              <span class="header-title-text"><span class="green-check">●</span> Incorporation Certificate *</span>
+              <span class="arrow" [class.rotated]="nestedOpen['incorpCert']">▲</span>
+            </div>
+            <div class="nested-content" *ngIf="nestedOpen['incorpCert']">
+              <p class="file-placeholder">No documents uploaded.</p>
+            </div>
+          </div>
+        </div>
+      </app-accordion-item>
+
+      <!-- 3. Business Details -->
+      <app-accordion-item title="Business Details" itemId="bizDetails" [isOpen]="openSectionId === 'bizDetails'" (toggle)="handleToggle($event)">
+        <h4 class="sec-heading">Business Details</h4>
+        <div class="grid-4">
+          <div class="field-box"><span class="lbl">Registered/Company Name *</span><span class="val">{{ summaryData.businessDetails.name }}</span></div>
+          <div class="field-box"><span class="lbl">Company Type *</span><span class="val">{{ summaryData.businessDetails.type }}</span></div>
+          <div class="field-box"><span class="lbl">Nature of the Business *</span><span class="val">{{ summaryData.businessDetails.nature }}</span></div>
+          <div class="field-box"><span class="lbl">Segment *</span><span class="val">{{ summaryData.businessDetails.segment }}</span></div>
+          <div class="field-box"><span class="lbl">Industry /Sector*</span><span class="val">{{ summaryData.businessDetails.industry }}</span></div>
+          <div class="field-box"><span class="lbl">Number of Directors *</span><span class="val">{{ summaryData.businessDetails.directorsCount }}</span></div>
+          <div class="field-box"><span class="lbl">Country of Incorporation *</span><span class="val">{{ summaryData.businessDetails.country }}</span></div>
+          <div class="field-box"><span class="lbl">Date of Incorporation *</span><span class="val">{{ summaryData.businessDetails.incorporationDate }}</span></div>
+          <div class="field-box"><span class="lbl">Registration Number *</span><span class="val">{{ summaryData.businessDetails.regNumber }}</span></div>
+          <div class="field-box"><span class="lbl">TIN Number *</span><span class="val">{{ summaryData.businessDetails.tinNumber }}</span></div>
+        </div>
+
+        <h4 class="sec-heading mt">Business Operation Details</h4>
+        <div class="grid-4">
+          <div class="field-box"><span class="lbl">No of Years in Operation</span><span class="val">{{ summaryData.businessDetails.operationYears }}</span></div>
+          <div class="field-box"><span class="lbl">Number of Employees</span><span class="val">{{ summaryData.businessDetails.employees }}</span></div>
+          <div class="field-box"><span class="lbl">Annual Turnover (Last Fiscal Year) *</span><span class="val">{{ summaryData.businessDetails.annualTurnover }}</span></div>
+          <div class="field-box"><span class="lbl">AVE stock Level</span><span class="val">{{ summaryData.businessDetails.stockLevel }}</span></div>
+          <div class="field-box"><span class="lbl">Telephone</span><span class="val">{{ summaryData.businessDetails.telephone }}</span></div>
+          <div class="field-box"><span class="lbl">Is the business labor or capital intensive?</span><span class="val">{{ summaryData.businessDetails.intensiveType }}</span></div>
+        </div>
+
+        <h4 class="sec-heading mt">Address & Relationship Info</h4>
+        <div class="grid-4">
+          <div class="field-box"><span class="lbl">Business Address</span><span class="val">{{ summaryData.businessDetails.address }}</span></div>
+          <div class="field-box"><span class="lbl">Parent Company</span><span class="val">{{ summaryData.businessDetails.parentCompany }}</span></div>
+          <div class="field-box"><span class="lbl">Does the business have an existing banking relationship with us?</span><span class="val">{{ summaryData.businessDetails.bankingRelationship }}</span></div>
+          <div class="field-box"><span class="lbl">Customer Description</span><span class="val">{{ summaryData.businessDetails.customerDesc }}</span></div>
+          <div class="field-box"><span class="lbl">Customer Description</span><span class="val">{{ summaryData.businessDetails.customerDesc }}</span></div>
+        </div>
+
+        <h4 class="sec-heading mt">Additional Details</h4>
+        <div class="grid-4">
+          <div class="field-box"><span class="lbl">Customer Description</span><span class="val">{{ summaryData.businessDetails.customerDesc }}</span></div>
+          <div class="field-box"><span class="lbl">Description of Business</span><span class="val">{{ summaryData.businessDetails.businessDesc }}</span></div>
+        </div>
+      </app-accordion-item>
+
+      <!-- 4. Director Details -->
+      <app-accordion-item title="Director Details" itemId="directorDetails" [isOpen]="openSectionId === 'directorDetails'" (toggle)="handleToggle($event)">
+        <h4 class="sec-heading">Director Details</h4>
+        <div class="sub-section-divider"></div>
+        <div class="sub-item-header">
+          <span class="green-check-badge">✔</span>
+          <span class="sub-item-title">Directors 1</span>
+        </div>
+        <div class="grid-4 mt-sm">
+          <div class="field-box"><span class="lbl">CIF Number</span><span class="val">{{ summaryData.director1.cif }}</span></div>
+          <div class="field-box"><span class="lbl">Prefix *</span><span class="val">{{ summaryData.director1.prefix }}</span></div>
+          <div class="field-box"><span class="lbl">First Name</span><span class="val">{{ summaryData.director1.firstName }}</span></div>
+          <div class="field-box"><span class="lbl">Last Name</span><span class="val">{{ summaryData.director1.lastName }}</span></div>
+          <div class="field-box"><span class="lbl">Position *</span><span class="val">{{ summaryData.director1.position }}</span></div>
+          <div class="field-box"><span class="lbl">Date of Birth</span><span class="val">{{ summaryData.director1.dob }}</span></div>
+          <div class="field-box"><span class="lbl">Gender</span><span class="val">{{ summaryData.director1.gender }}</span></div>
+          <div class="field-box"><span class="lbl">Nationality</span><span class="val">{{ summaryData.director1.nationality }}</span></div>
+          <div class="field-box"><span class="lbl">Identification Number</span><span class="val">{{ summaryData.director1.idNumber }}</span></div>
+          <div class="field-box"><span class="lbl">Date issued</span><span class="val">{{ summaryData.director1.issueDate }}</span></div>
+          <div class="field-box"><span class="lbl">Expiry Date</span><span class="val">{{ summaryData.director1.expiryDate }}</span></div>
+          <div class="field-box"><span class="lbl">County of Issued</span><span class="val">{{ summaryData.director1.issueCountry }}</span></div>
+          <div class="field-box"><span class="lbl">County of Residence</span><span class="val">{{ summaryData.director1.residenceCountry }}</span></div>
+          <div class="field-box"><span class="lbl">Share Percentage</span><span class="val">{{ summaryData.director1.sharePercentage }}</span></div>
+          <div class="field-box"><span class="lbl">Marital Status</span><span class="val">{{ summaryData.director1.maritalStatus }}</span></div>
+        </div>
+      </app-accordion-item>
+
+      <!-- 5. Disbursement Details -->
+      <app-accordion-item title="Disbursement Details" itemId="disburseDetails" [isOpen]="openSectionId === 'disburseDetails'" (toggle)="handleToggle($event)">
+        <h4 class="sec-heading">Disbursement Details</h4>
+        <div class="grid-4">
+          <div class="field-box"><span class="lbl">Disbursement Type*</span><span class="val">{{ summaryData.disbursement.type }}</span></div>
+          <div class="field-box"><span class="lbl">Account</span><span class="val">{{ summaryData.disbursement.accountType }}</span></div>
+          <div class="field-box"><span class="lbl">Do you have Internal Account</span><span class="val">{{ summaryData.disbursement.hasInternalAccount }}</span></div>
+          <div class="field-box"><span class="lbl">Account No</span><span class="val">{{ summaryData.disbursement.accountNo }}</span></div>
+          <div class="field-box"><span class="lbl">Account Holder</span><span class="val">{{ summaryData.disbursement.accountHolder }}</span></div>
+          <div class="field-box"><span class="lbl">Branch Name</span><span class="val">{{ summaryData.disbursement.branchName }}</span></div>
+        </div>
+      </app-accordion-item>
+
+      <!-- 6. Credit Bureau -->
+      <app-accordion-item title="Credit Bureau" itemId="creditBureau" [isOpen]="openSectionId === 'creditBureau'" (toggle)="handleToggle($event)">
+        <h4 class="sec-heading">Credit Bureau</h4>
+        <div class="grid-4">
+          <div class="field-box"><span class="lbl">National ID</span><span class="val">{{ summaryData.creditBureau.nationalId }}</span></div>
+          <div class="field-box"><span class="lbl">Mobile No</span><span class="val">{{ summaryData.creditBureau.mobileNo }}</span></div>
+          <div class="field-box"><span class="lbl">Credit Bureau Status</span><span class="val text-success">{{ summaryData.creditBureau.status }}</span></div>
+        </div>
+      </app-accordion-item>
+
+      <!-- 7. Collateral Details -->
+      <app-accordion-item title="Collateral Details" itemId="collateralDetails" [isOpen]="openSectionId === 'collateralDetails'" (toggle)="handleToggle($event)">
+        <h4 class="sec-heading">Collateral Details</h4>
+        <div class="table-card">
+          <div class="search-bar-row">
+            <input type="text" placeholder="🔍 Search input text" class="search-input" />
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Collateral Name</th>
+                <th>Ownership of the collateral</th>
+                <th>Asset Monetary Worth</th>
+                <th>Description of Collateral</th>
+                <th>Document Upload</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of summaryData.collaterals">
+                <td class="text-blue">{{ item.name }}</td>
+                <td>{{ item.ownership }}</td>
+                <td>{{ item.value }}</td>
+                <td>{{ item.desc }}</td>
+                <td><a href="javascript:void(0)" class="link-btn">View Document</a></td>
+                <td><span class="action-icons">✏️ 🗑️</span></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="table-pagination">
+            <span>Items per page: 100 ▾</span>
+            <span>1–100 of 100 items</span>
+            <span>1 ▾ of 10 pages &nbsp; ◀ ▶</span>
+          </div>
+        </div>
+
+        <h4 class="sec-heading mt">Existing Loans/Obligations</h4>
+        <div class="table-card">
+          <div class="search-bar-row">
+            <input type="text" placeholder="🔍 Search input text" class="search-input" />
+          </div>
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Bank / Institution Na...</th>
+                <th>Account Number</th>
+                <th>Remaining Tenure (M...</th>
+                <th>Outstanding Amount</th>
+                <th>Loan Amount</th>
+                <th>Monthly Repayment</th>
+                <th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let loan of summaryData.existingLoans">
+                <td class="text-blue">{{ loan.bank }}</td>
+                <td>{{ loan.accountNo }}</td>
+                <td>{{ loan.tenure }}</td>
+                <td>{{ loan.outstanding }}</td>
+                <td>{{ loan.loanAmount }}</td>
+                <td>{{ loan.monthlyRepay }}</td>
+                <td><span class="action-icons">✏️ 🗑️</span></td>
+              </tr>
+            </tbody>
+          </table>
+          <div class="table-pagination">
+            <span>Items per page: 100 ▾</span>
+            <span>1–100 of 100 items</span>
+            <span>1 ▾ of 10 pages &nbsp; ◀ ▶</span>
+          </div>
+        </div>
+      </app-accordion-item>
+
+      <!-- 8. Terms And Conditions -->
+      <app-accordion-item title="Terms And Conditions" itemId="terms" [isOpen]="openSectionId === 'terms'" (toggle)="handleToggle($event)">
+        <p class="terms-text">All terms and conditions have been verified and digitally acknowledged.</p>
+      </app-accordion-item>
+
+      <!-- 9. Digital Signature -->
+      <div class="disabled-step-row">
+        <div class="step-left">
+          <span class="hollow-dot"></span>
+          <span class="st-text">Digital Signature</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- BOTTOM ACTION BAR -->
+    <div class="footer-actions">
+      <button type="button" class="btn btn-back" (click)="onBack()">Back</button>
+      <button type="button" class="btn btn-next" (click)="onNext()">Next</button>
+    </div>
+
+  </div>
+</div>

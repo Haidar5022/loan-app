@@ -1,26 +1,41 @@
-<p class="eyebrow">Enter your Account number to get started.</p>
+<div class="page-wrapper">
+  <div class="login-card">
+    
+    <!-- LEFT BANNER (Pure Image - No HTML Text Overlay Needed) -->
+    <div class="left-banner">
+      <img src="images/login1.jpg" alt="Login Banner" class="banner-img" />
+    </div>
 
-<form [formGroup]="form" (ngSubmit)="onContinue()">
+    <!-- RIGHT FORM SECTION -->     
+    <div class="right-form">
+      <div class="form-container">
+        
+        <div class="instruction-text">Enter your Account number to get started.</div>
 
-  <div class="field" [class.invalid]="accountNo.invalid && accountNo.touched">
-    <label>Account No *</label>
-    <input
-      type="text"
-      formControlName="accountNo"
-      inputmode="numeric"
-      maxlength="16"
-      autocomplete="off"
-    />
-    <div class="error-msg">Please enter a valid account number (9–16 digits).</div>
-  </div>
+        <!-- Angular Material Field -->
+        <mat-form-field appearance="outline" class="custom-field">
+          <mat-label>Account No *</mat-label>
+          <input matInput [(ngModel)]="accountNumber" type="text" maxlength="19" />
+        </mat-form-field>
 
-  <button type="submit" class="btn btn-primary">Continue</button>
-</form>
+        <!-- Validation Error Display -->
+<div *ngIf="errorMessage" style="color: red; font-size: 12px; margin-bottom: 0px;">
+  {{ errorMessage }}
+</div>
 
-<div class="promo">
-  <div class="promo-image loans"></div>
-  <div class="promo-copy">
-    <div class="title">Get Personal Loans at Just 8.99%!</div>
-    <div class="sub">Flexible tenure options and easy EMIs.</div>
+        <!-- Pill Button -->
+        <button mat-flat-button class="submit-btn" (click)="onContinue()">
+          Continue
+        </button>
+
+        <!-- Promo Offer Card -->
+        <div class="promo-card">
+          <img src="images/login2.jpg" alt="Promo Offer" class="promo-img" />
+         
+        </div>
+
+      </div>
+    </div>
+
   </div>
 </div>

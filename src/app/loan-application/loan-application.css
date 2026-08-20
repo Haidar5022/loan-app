@@ -1,0 +1,325 @@
+/* Core Layout Setup */
+.page-container {
+  background-color: #f4f6fa;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  overflow-x: hidden;
+}
+
+.app-header {
+  background-color: #004C97;
+  height: 52px;
+  width: 100%;
+  padding: 0 32px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+}
+
+.header-inner { width: 100%; color: #ffffff; }
+.brand-text { font-size: 14px; }
+
+.content-wrapper {
+  width: 100%;
+  padding: 24px 32px 60px 32px;
+  box-sizing: border-box;
+}
+
+/* =========================================================
+   STEPPER CARD
+========================================================= */
+.stepper-card {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 20px 24px 28px 24px;
+  border: 1px solid #e5e7eb;
+  margin-bottom: 24px;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
+}
+
+.stepper-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+}
+
+.title-section h2 {
+  font-size: 18px;
+  color: #004C97;
+  margin: 0 0 4px 0;
+  font-weight: 600;
+}
+
+.subtitle { font-size: 12px; color: #6b7280; margin: 0px; }
+
+.ref-number {
+  border: 1px solid #93c5fd;
+  background: #ffffff;
+  padding: 4px 14px;
+  border-radius: 16px;
+  font-size: 12px;
+  color: #374151;
+  white-space: nowrap;
+}
+
+.stepper-scroll-view {
+  width: 100%;
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding-top: 4px;
+  
+}
+.stepper-scroll-view::-webkit-scrollbar { display: none; }
+
+.steps-track-wrapper {
+  position: relative;
+  display: block;
+  width: max-content;
+  min-width: 100%;
+  
+}
+
+/* Gray base line — fixed-width steps ki wajah se poori 10 stages tak jayegi */
+.steps-track {
+  position: absolute;
+  top: -5px;
+  left: 10px;
+  right: 10px;
+  height: 2px;
+  background: #e5e7eb;
+  z-index: 0;
+  overflow: hidden;
+}
+
+/* GREEN PROGRESS LINE — kitne stage complete/active hain woh dikhati hai.
+   Width [style.width.%]="progressPercent" se HTML mein bindhi hai (TS se aati hai) */
+.steps-progress {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: #10b981;
+  z-index: 1;
+  transition: width 0.3s ease-in-out;
+}
+
+.steps-list {
+  display: flex;
+  position: relative;
+  z-index: 2;
+}
+
+/* Fixed pixel width per step — isi se line sahi measure hoti hai */
+.step-item {
+  flex: 0 0 200px;
+  width: 200px;
+  box-sizing: border-box;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+.step-item :hover { 
+  cursor: pointer;
+  color: #3085da;
+  font-weight: bold;
+}
+.step-node {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  background: #ffffff;
+  flex-shrink: 0;
+  z-index: 2;
+}
+
+.step-item.completed .step-node { background: #10b981; color: #ffffff; }
+.step-item.active .step-node { color: #004C97; font-weight: bold; }
+
+.icon-dotted, .dotted-icon {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 1.5px dotted #9ca3af;
+  display: inline-block;
+  background: #ffffff;
+}
+
+.step-info { display: flex; flex-direction: column; }
+
+.step-name {
+  font-size: 12px;
+  font-weight: 500;
+  color: #0e0e0f;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.step-stage { font-size: 11px; color: #6b7280; margin-top: 2px; }
+
+
+/* =========================================================
+   ACCORDION CONTAINER
+========================================================= */
+.accordion-container {
+  background: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #eeeef1;
+  overflow: hidden;
+  box-shadow: 0 1px 2px rgba(238, 230, 230, 0.03);
+}
+
+.accordion-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 20px;
+  border-bottom: 1px solid #f3f4f6;
+  font-size: 14px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.accordion-header.active {
+  color: #004C97;
+  border-left: 4px solid #004C97;
+  padding-left: 16px;
+}
+
+.accordion-header.collapsed {
+  color: #513749;
+  font-weight: 480;
+  cursor: pointer;
+  background: #ffffff;
+}
+
+.accordion-header h3 { margin: 0; font-size: 14px; font-weight: 600; }
+
+.accordion-body.active-body {
+  padding: 24px;
+  border-left: 4px solid #004C97;
+  background: #ffffff;
+}
+
+.form-section { margin-bottom: 24px; }
+
+.section-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #111827;
+  margin-bottom: 12px;
+}
+
+/* Grids & Inputs */
+.grid-4-col {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px 24px;
+  
+}
+
+.grid-2-col {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+}
+
+.margin-top-20 { margin-top: 20px; }
+
+/* Loan Information ke fields (Loan Amount, Tenure, EMI, etc.) */
+.info-group {
+  min-width: 0; /* text overflow/wrap ke liye zaroori grid ke andar */
+}
+.info-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 490;
+  color: #6b7280;
+  margin-bottom: 4px;
+}
+.info-group .value {
+  font-size: 15px;
+  font-weight: 600;
+  color: #111827;
+  word-break: break-word;
+}
+
+.floating-fieldset {
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 0 12px 4px 12px;
+  margin: 0;
+  width: 260px;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.floating-fieldset legend { font-size: 11px; color: #6b7280; padding: 0 4px; }
+.floating-fieldset legend .required { color: #dc2626; }
+
+.custom-select-clean {
+  width: 100%;
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 13px;
+  font-weight: 600;
+  color: #111827;
+  padding: 4px 0;
+  cursor: pointer;
+}
+
+.radio-title { font-size: 12px; color: #6b7280; display: block; margin-bottom: 10px; }
+.radio-options { display: flex; gap: 20px; }
+.radio-item { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #111827; cursor: pointer; }
+.radio-item input[type="radio"] { accent-color: #004C97; width: 16px; height: 16px; }
+
+.accordion-actions {
+  display: flex !important;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 12px;
+  margin-top: 24px;
+  padding-top: 16px;
+}
+
+.btn-back {
+  width: 180px;
+  height: 40px;
+  
+  border: 1px solid #004C97;
+  background: #ffffff;
+  color: #166bbf;
+  padding: 6px 28px;
+  border-radius: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 13px;
+  outline: none;
+  transition: all 0.2s ease;
+}
+.btn-back:hover { background-color: #f0f7ff; }
+
+.btn-primary {
+  width: 180px;
+  height: 40px;
+  border: none;
+  background: #096dd1;
+  color: #f5f5f8;
+  padding: 6px 28px;
+  border-radius: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 13px;
+  outline: none;
+  transition: all 0.2s ease;
+}
+.btn-primary:hover { background-color: #00366b; }

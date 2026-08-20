@@ -1,0 +1,194 @@
+<div class="page-container">
+
+  <!-- 1. Top Header Bar -->
+  <header class="app-header">
+    <div class="header-inner">
+      <span class="brand-text">Rumango <strong>ICUST Bank</strong></span>
+    </div>
+  </header>
+
+  <!-- Main Content Wrapper -->
+  <main class="content-wrapper">
+
+    <!-- BOX 1: Stepper Card -->
+    <div class="stepper-card">
+      <div class="stepper-header">
+        <div class="title-section">
+          <h2>Business Loan</h2>
+          <p class="subtitle">"Get your Loan account in just 11 steps"</p>
+        </div>
+        <div class="ref-number">
+          Ref Number: <strong>{{ refNumber }}</strong>
+        </div>
+      </div>
+
+      <div class="stepper-scroll-view">
+        <div class="steps-track-wrapper">
+          <div class="steps-track">
+            <div class="steps-progress" [style.width.%]="progressPercent"></div>
+          </div>
+
+          <div class="steps-list">
+            <div class="step-item" *ngFor="let step of steps" [ngClass]="step.status">
+              <div class="step-node">
+                <span *ngIf="step.status === 'completed'" class="icon-check">✓</span>
+                <span *ngIf="step.status === 'active'" class="icon-half">◐</span>
+                <span *ngIf="step.status === 'pending'" class="icon-dotted"></span>
+              </div>
+              <div class="step-info">
+                <span class="step-name">{{ step.name }}</span>
+                <span class="step-stage">Stage {{ step.stage }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- BOX 2: Main Active Accordion Card -->
+    <div class="accordion-container">
+
+      <div class="accordion-header active">
+        <span class="accordion-icon active-icon">◐</span>
+        <h3>Loan Details</h3>
+      </div>
+
+      <div class="accordion-body active-body">
+
+        <!-- Section 1: Loan Information -->
+        <section class="form-section">
+          <h4 class="section-title">Loan Information</h4>
+
+          <div class="grid-4-col">
+            <div class="info-group">
+              <label>Loan Amount Requested (GHS)*</label>
+              <div class="value">{{ requestedAmount }}</div>
+            </div>
+            <div class="info-group">
+              <label>Interest Payable</label>
+              <div class="value">{{ interestPayable }}</div>
+            </div>
+            <div class="info-group">
+              <label>Tenure</label>
+              <div class="value">{{ tenure }}</div>
+            </div>
+            <div class="info-group">
+              <label>Total Principal Amount</label>
+              <div class="value">{{ totalPrincipal }}</div>
+            </div>
+          </div>
+
+          <div class="grid-4-col margin-top-20">
+            <div class="info-group">
+              <label>EMI Amount</label>
+              <div class="value">{{ emiAmount }}</div>
+            </div>
+            <div class="info-group">
+              <label>Total Payable Amount</label>
+              <div class="value">{{ totalPayable }}</div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Section 2: Loan Purpose -->
+        <section class="form-section">
+          <h4 class="section-title">Loan Purpose</h4>
+          <div class="field-container">
+            <fieldset class="floating-fieldset">
+              <legend>Purpose of Loan<span class="required">*</span></legend>
+              <select [(ngModel)]="purposeOfLoan" class="custom-select-clean">
+                <option value="Business Expansion">Business Expansion</option>
+                <option value="Working Capital">Working Capital</option>
+              </select>
+            </fieldset>
+          </div>
+        </section>
+
+        <!-- Section 3: Credit Facility Details -->
+        <section class="form-section">
+          <h4 class="section-title">Credit Facility Details</h4>
+          <div class="info-group">
+            <label>Type of Credit Facility Required*</label>
+            <div class="value">Line of Credit</div>
+          </div>
+
+          <div class="grid-2-col margin-top-20">
+            <div class="radio-group">
+              <label class="radio-title">Do you have collateral to offer?</label>
+              <div class="radio-options">
+                <label class="radio-item">
+                  <input type="radio" name="collateral" value="yes" [(ngModel)]="hasCollateral">
+                  Yes
+                </label>
+                <label class="radio-item">
+                  <input type="radio" name="collateral" value="no" [(ngModel)]="hasCollateral">
+                  No
+                </label>
+              </div>
+            </div>
+
+            <div class="radio-group">
+              <label class="radio-title">Do you have a current credit facility with us or any other financial institution?</label>
+              <div class="radio-options">
+                <label class="radio-item">
+                  <input type="radio" name="existingCredit" value="yes" [(ngModel)]="hasExistingFacility">
+                  Yes
+                </label>
+                <label class="radio-item">
+                  <input type="radio" name="existingCredit" value="no" [(ngModel)]="hasExistingFacility">
+                  No
+                </label>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Action Buttons -->
+        <div class="accordion-actions">
+          <button
+            type="button"
+            class="btn btn-back"
+            (click)="onBack()">           
+            Back
+          </button>
+          <button type="button" class="btn btn-primary" (click)="onNext()">Next</button>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- BOX 3: Collapsed Stage Cards (Cleaned Structure) -->
+    <div class="collapsed-steps-list">
+      <div class="accordion-header collapsed">
+        <span class="accordion-icon dotted-icon"></span>
+        <span>Document Upload</span>
+      </div>
+      <div class="accordion-header collapsed">
+        <span class="accordion-icon dotted-icon"></span>
+        <span>Business Details</span>
+      </div>
+      <div class="accordion-header collapsed">
+        <span class="accordion-icon dotted-icon"></span>
+        <span>Director's Document Upload</span>
+      </div>
+      <div class="accordion-header collapsed">
+        <span class="accordion-icon dotted-icon"></span>
+        <span>Director Details</span>
+      </div>
+      <div class="accordion-header collapsed">
+        <span class="accordion-icon dotted-icon"></span>
+        <span>Terms And Conditions</span>
+      </div>
+      <div class="accordion-header collapsed">
+        <span class="accordion-icon dotted-icon"></span>
+        <span>Summary</span>
+      </div>
+      <div class="accordion-header collapsed">
+        <span class="accordion-icon dotted-icon"></span>
+        <span>Digital Signature</span>
+      </div>
+    </div>
+
+  </main>
+</div>
