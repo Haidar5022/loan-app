@@ -37,7 +37,7 @@
               </div>
               <div class="step-info">
                 <span class="step-name">{{ step.name }}</span>
-                <span class="step-stage">Stage {{ step.stage }}</span>
+                <!-- <span class="step-stage">Stage {{ step.stage }}</span> -->
               </div>
             </div>
           </div>
@@ -62,30 +62,30 @@
           <div class="grid-4-col">
             <div class="info-group">
               <label>Loan Amount Requested (GHS)*</label>
-              <div class="value">{{ requestedAmount }}</div>
+              <div class="value">{{ requestedAmount() }}</div>
             </div>
             <div class="info-group">
               <label>Interest Payable</label>
-              <div class="value">{{ interestPayable }}</div>
+              <div class="value">{{ interestPayable() }}</div>
             </div>
             <div class="info-group">
               <label>Tenure</label>
-              <div class="value">{{ tenure }}</div>
+              <div class="value">{{ tenure() }}</div>
             </div>
             <div class="info-group">
               <label>Total Principal Amount</label>
-              <div class="value">{{ totalPrincipal }}</div>
+              <div class="value">{{ totalPrincipal() }}</div>
             </div>
           </div>
 
           <div class="grid-4-col margin-top-20">
             <div class="info-group">
               <label>EMI Amount</label>
-              <div class="value">{{ emiAmount }}</div>
+              <div class="value">{{ emiAmount() }}</div>
             </div>
             <div class="info-group">
               <label>Total Payable Amount</label>
-              <div class="value">{{ totalPayable }}</div>
+              <div class="value">{{ totalPayable() }}</div>
             </div>
           </div>
         </section>

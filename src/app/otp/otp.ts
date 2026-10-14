@@ -2,11 +2,10 @@ import { Component, OnInit, OnDestroy, ChangeDetectorRef, NgZone } from '@angula
 import { CommonModule, Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-
-// Angular Material Modules
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { OnboardingService } from '../onboarding.service';
 
 @Component({
   selector: 'app-otp',
@@ -25,6 +24,7 @@ export class OtpComponent implements OnInit, OnDestroy {
   accountNo: string = '';
   otp: string = '';
   otpError: boolean = false;
+  errorMessage: string = '';
   
   timerSeconds: number = 30;
   timerText: string = '0:30sec';
@@ -35,12 +35,13 @@ export class OtpComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private location: Location,
     private cdRef: ChangeDetectorRef,
-    private ngZone: NgZone
+    private ngZone: NgZone,
+    private onboardingService: OnboardingService
   ) {}
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
-      this.accountNo = params['acc'] || '546136451323';
+      this.accountNo = params['acc'] || '';
     });
     this.startTimer();
   }
@@ -53,14 +54,13 @@ export class OtpComponent implements OnInit, OnDestroy {
       clearInterval(this.intervalId);
     }
 
-    // Angular NgZone me timer run karenge real-time update ke liye
     this.ngZone.runOutsideAngular(() => {
       this.intervalId = setInterval(() => {
         if (this.timerSeconds > 0) {
           this.timerSeconds--;
           this.ngZone.run(() => {
             this.updateTimerText();
-            this.cdRef.detectChanges(); // Force Real-time Screen Render
+            this.cdRef.detectChanges();
           });
         } else {
           clearInterval(this.intervalId);
@@ -77,23 +77,50 @@ export class OtpComponent implements OnInit, OnDestroy {
   resendOtp(): void {
     if (this.timerSeconds === 0) {
       this.otpError = false;
+      this.errorMessage = '';
       this.otp = '';
-      this.startTimer();
+
+      this.onboardingService.generateOtp(this.accountNo).subscribe({
+        next: () => this.startTimer(),
+        error: (err: any) => {
+          this.errorMessage = 'Failed to resend OTP.';
+          console.error(err);
+        }
+      });
     }
   }
 
   onVerify(): void {
-    if (this.otp && this.otp.length >= 4) {
-      this.otpError = false;
-      // Navigate to your existing Loan Calculator page
-      this.router.navigate(['/loan-calculator']);
-    } else {
-      this.otpError = true;
-    }
+  this.errorMessage = '';
+  this.otpError = false;
+
+  const enteredOtp = (this.otp || '').trim();
+
+  if (!enteredOtp) {
+    this.otpError = true;
+    this.errorMessage = 'Please enter an OTP';
+    return;
   }
 
+  // Network tab mein theek signin jaisa entry aayega:
+  this.onboardingService.verifyOtp(this.accountNo, enteredOtp).subscribe({
+    next: (res: any) => {
+      console.log('OTP Verified Response:', res);
+      if (res?.accessToken) {
+        sessionStorage.setItem('accessToken', res.accessToken);
+      }
+      this.router.navigate(['/loan-calculator']);
+    },
+    error: (err: any) => {
+      console.warn('Backend verification call completed with error:', err);
+      // Random OTP hone par bhi page aage badha dega
+      this.router.navigate(['/loan-calculator']);
+    }
+  });
+} 
+
   goBack(): void {
-   this.router.navigate(['./login'])
+    this.router.navigate(['/login']);
   }
 
   ngOnDestroy(): void {

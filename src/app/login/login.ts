@@ -1,43 +1,47 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { OnboardingService } from '../onboarding.service';
 
 @Component({
-  
   selector: 'app-login',
   standalone: true,
   imports: [MatFormFieldModule, MatInputModule, MatButtonModule, CommonModule, FormsModule],
   templateUrl: './login.html',
   styleUrls: ['./login.css']
-
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   accountNumber: string = '';
   errorMessage: string = '';
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private onboardingService: OnboardingService
+  ) {}
 
-  onContinue() {
+  ngOnInit(): void {
+    this.authenticate();
+  }
+
+  authenticate(): void {
+    this.onboardingService.signInWebsiteUser().subscribe({
+      next: () => console.log('Token successfully generated and stored'),
+      error: (err: any) => console.error('Signin API failed:', err)
+    });
+  }
+
+  onContinue(): void {
     this.errorMessage = '';
-    
-    // Account Number validation: Only digits, length 10 to 19
-    const accountRegex = /^\d{10,19}$/;
 
-    if (!this.accountNumber) {
-      this.errorMessage = 'Please enter Account Number';
+    if (!this.accountNumber || !this.accountNumber.trim()) {
+      this.errorMessage = 'Please enter Account Number or Mobile';
       return;
     }
 
-    if (!accountRegex.test(this.accountNumber)) {
-      this.errorMessage = 'Account number must be between 10 to 19 digits';
-      return;
-    }
-
-    // Pass account number to OTP page
-    this.router.navigate(['/otp'], { queryParams: { acc: this.accountNumber } });
+    this.router.navigate(['/otp'], { queryParams: { acc: this.accountNumber.trim() } });
   }
 }

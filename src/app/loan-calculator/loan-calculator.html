@@ -15,15 +15,17 @@
         <div class="label-row">
           <label>Amount</label>
           <div class="amount-box">
-            ₹ {{ amount | number }}
+            ₹ {{ amount() | number }}
           </div>
         </div>
+        
         <input 
           type="range" 
           min="50000" 
           max="50000000" 
           step="10000" 
-          [(ngModel)]="amount" 
+          [value]="amount()" 
+          (input)="onAmountChange($event)"
           class="slider"
         />
         <div class="range-labels">
@@ -37,21 +39,23 @@
         <div class="label-row">
           <label>Tenure</label>
           <div class="toggle-switch">
-            <button [class.active]="tenureType === 'Year'" (click)="setTenureType('Year')">1 Year</button>
-            <button [class.active]="tenureType === 'Month'" (click)="setTenureType('Month')">Month</button>
-            <button [class.active]="tenureType === 'Days'" (click)="setTenureType('Days')">Days</button>
+            <button [class.active]="tenureType() === 'Year'" (click)="setTenureType('Year')">1 Year</button>
+            <button [class.active]="tenureType() === 'Month'" (click)="setTenureType('Month')">Month</button>
+            <button [class.active]="tenureType() === 'Days'" (click)="setTenureType('Days')">Days</button>
           </div>
         </div>
+        
         <input 
           type="range" 
           [min]="1" 
-          [max]="tenureType === 'Year' ? 10 : (tenureType === 'Month' ? 120 : 365)" 
-          [(ngModel)]="tenure" 
+          [max]="tenureType() === 'Year' ? 10 : (tenureType() === 'Month' ? 120 : 365)" 
+          [value]="tenure()" 
+          (input)="onTenureChange($event)"
           class="slider"
         />
         <div class="range-labels">
           <span>1</span>
-          <span>{{ tenureType === 'Year' ? 10 : (tenureType === 'Month' ? 120 : 365) }}</span>
+          <span>{{ tenureType() === 'Year' ? 10 : (tenureType() === 'Month' ? 120 : 365) }}</span>
         </div>
       </div>
 
@@ -64,22 +68,22 @@
     <div class="calc-right">
       <div class="emi-header">
         <p>Your Monthly EMI Payment</p>
-        <h1>₹ {{ monthlyEmi | number }}</h1>
+        <h1>₹ {{ monthlyEmi() | number }}</h1>
       </div>
 
       <div class="summary-details">
         <div class="detail-row">
           <span>Principal Amount</span>
-          <strong>₹ {{ amount | number }}</strong>
+          <strong>₹ {{ amount() | number }}</strong>
         </div>
         <div class="detail-row">
           <span>Interest Amount</span>
-          <strong>₹ {{ totalInterest | number }}</strong>
+          <strong>₹ {{ totalInterest() | number }}</strong>
         </div>
         <hr />
         <div class="detail-row total">
           <span>Total Amount</span>
-          <strong>₹ {{ totalAmount | number }}</strong>
+          <strong>₹ {{ totalAmount() | number }}</strong>
         </div>
       </div>
     </div>
